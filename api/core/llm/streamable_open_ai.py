@@ -2,14 +2,18 @@ import os
 
 from langchain.callbacks.manager import Callbacks
 from langchain.schema import LLMResult
-from typing import Optional, List, Dict, Any, Mapping
+from typing import Optional, List, Dict, Any, Mapping, Union, Tuple
 from langchain import OpenAI
 from pydantic import root_validator
 
-from core.llm.error_handle_wraps import handle_llm_exceptions, handle_llm_exceptions_async
+from core.llm.wrappers.openai_wrapper import handle_openai_exceptions
 
 
 class StreamableOpenAI(OpenAI):
+    request_timeout: Optional[Union[float, Tuple[float, float]]] = (5.0, 300.0)
+    """Timeout for requests to OpenAI completion API. Default is 600 seconds."""
+    max_retries: int = 1
+    """Maximum number of retries to make when generating."""
 
     @root_validator()
     def validate_environment(cls, values: Dict) -> Dict:
@@ -49,7 +53,7 @@ class StreamableOpenAI(OpenAI):
             "organization": self.openai_organization if self.openai_organization else None,
         }}
 
-    @handle_llm_exceptions
+    @handle_openai_exceptions
     def generate(
             self,
             prompts: List[str],
@@ -59,12 +63,6 @@ class StreamableOpenAI(OpenAI):
     ) -> LLMResult:
         return super().generate(prompts, stop, callbacks, **kwargs)
 
-    @handle_llm_exceptions_async
-    async def agenerate(
-            self,
-            prompts: List[str],
-            stop: Optional[List[str]] = None,
-            callbacks: Callbacks = None,
-            **kwargs: Any,
-    ) -> LLMResult:
-        return await super().agenerate(prompts, stop, callbacks, **kwargs)
+    @classmethod
+    def get_kwargs_from_model_params(cls, params: dict):
+        return params

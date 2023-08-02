@@ -17,11 +17,16 @@
 - 一套 API 即可包含插件、上下文增强等能力，替你省下了后端代码的编写工作
 - 可视化的对应用进行数据分析，查阅日志或进行标注
 
-Dify 兼容 Langchain，这意味着我们将逐步支持多种 LLMs ，目前已支持：
+Dify 兼容 Langchain，这意味着我们将逐步支持多种 LLMs ，目前支持的模型供应商：
 
-- GPT 3 (text-davinci-003)
-- GPT 3.5 Turbo(ChatGPT)
-- GPT-4
+* **OpenAI**：GPT4、GPT3.5-turbo、GPT3.5-turbo-16k、text-davinci-003 
+
+* **Azure OpenAI Service**
+* **Anthropic**：Claude2、Claude-instant
+
+> 我们为所有注册云端版的用户免费提供了 1000 次 Claude 模型的消息调用额度，登录 [dify.ai](https://cloud.dify.ai) 即可使用。
+
+* **Hugging Face Hub**（即将推出）
 
 ## 使用云服务
 
@@ -129,7 +134,6 @@ A: 现已支持英文与中文，你可以为我们贡献语言包。
 本软件使用了以下开源软件：
 
 - Chase, H. (2022). LangChain [Computer software]. https://github.com/hwchase17/langchain
-- Liu, J. (2022). LlamaIndex [Computer software]. doi: 10.5281/zenodo.1234.
 
 更多信息，请参考相应软件的官方网站或许可证文本。
 

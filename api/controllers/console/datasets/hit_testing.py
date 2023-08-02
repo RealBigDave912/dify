@@ -28,6 +28,7 @@ segment_fields = {
     'position': fields.Integer,
     'document_id': fields.String,
     'content': fields.String,
+    'answer': fields.String,
     'word_count': fields.Integer,
     'tokens': fields.Integer,
     'keywords': fields.List(fields.String),
@@ -95,8 +96,8 @@ class HitTestingApi(Resource):
             return {"query": response['query'], 'records': marshal(response['records'], hit_testing_record_fields)}
         except services.errors.index.IndexNotInitializedError:
             raise DatasetNotInitializedError()
-        except ProviderTokenNotInitError:
-            raise ProviderNotInitializeError()
+        except ProviderTokenNotInitError as ex:
+            raise ProviderNotInitializeError(ex.description)
         except QuotaExceededError:
             raise ProviderQuotaExceededError()
         except ModelCurrentlyNotSupportError:
